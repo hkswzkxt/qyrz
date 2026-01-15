@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业对接材料提交表单</title>
+    <style>
+        /* 全局样式重置与基础设置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", "PingFang SC", sans-serif;
+        }
+        
+        :root {
+            /* 主题色 */
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            /* 辅助色 */
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            /* 间距与圆角 */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 20px 15px;
+        }
+
+        /* 表单容器 */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 表单标题装饰 */
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-100);
+            position: relative;
+        }
+
+        .form-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        /* 表单分区 */
+        .form-section {
+            margin-bottom: 35px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            padding-left: 12px;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        /* 表单项样式 */
+        .form-item {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-item label {
+            font-size: 15px;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-item label .required {
+            color: var(--danger-color);
+            margin-left: 6px;
+            font-weight: 600;
+        }
+
+        .form-item input, 
+        .form-item select, 
+        .form-item textarea {
+            padding: 12px 15px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            color: var(--gray-800);
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: var(--gray-50);
+        }
+
+        .form-item input:focus, 
+        .form-item select:focus, 
+        .form-item textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .form-item textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* 文件上传区域美化 */
+        .upload-area {
+            border: 2px dashed var(--gray-200);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--gray-50);
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.03);
+            transform: translateY(-2px);
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 15px;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .upload-area .hint {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 25px 20px;
+            }
+            
+            .form-title {
+                font-size: 20px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+            }
+            
+            .upload-area {
+                padding: 20px 15px;
+            }
+            
+            .upload-icon {
+                font-size: 28px;
+            }
+        }
+
+        /* 渐入动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <!-- 引入图标库（用于上传区域图标） -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-title">企业对接材料提交表单</div>
+        <form id="enterpriseForm" enctype="multipart/form-data">
+
+        <!-- 企业基础信息 -->
+        <div class="form-section">
+            <div class="section-title">一、企业基础信息</div>
+            <div class="form-item">
+                <label>企业全称 <span class="required">*</span></label>
+                <input type="text" name="companyName" placeholder="请填写与营业执照一致的企业完整名称" required>
+            </div>
+            <div class="form-item">
+                <label>统一社会信用代码 <span class="required">*</span></label>
+                <input type="text" name="socialCreditCode" placeholder="请输入18位统一社会信用代码" required>
+            </div>
+            <div class="form-item">
+                <label>企业性质</label>
+                <select name="companyType">
+                    <option value="">请选择企业性质</option>
+                    <option value="国企">国有企业</option>
+                    <option value="民企">民营企业</option>
+                    <option value="外资">外资企业</option>
+                    <option value="合资">合资企业</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label>所属行业</label>
+                <input type="text" name="industry" placeholder="如：信息技术、制造业、服务业、建筑行业等">
+            </div>
+            <div class="form-item">
+                <label>企业注册地址 <span class="required">*</span></label>
+                <input type="text" name="registrationAddress" placeholder="请填写详细注册地址（省/市/区/街道/门牌号）" required>
+            </div>
+        </div>
+
+        <!-- 对接人信息 -->
+        <div class="form-section">
+            <div class="section-title">二、对接人信息</div>
+            <div class="form-item">
+                <label>对接人姓名 <span class="required">*</span></label>
+                <input type="text" name="contactName" placeholder="请填写对接人真实姓名" required>
+            </div>
+            <div class="form-item">
+                <label>联系电话 <span class="required">*</span></label>
+                <input type="tel" name="contactPhone" placeholder="请填写有效手机号码" required>
+            </div>
+            <div class="form-item">
+                <label>身份证号 <span class="required">*</span></label>
+                <input type="text" name="contactIdCard" placeholder="请填写对接人身份证号码" required>
+            </div>
+            <div class="form-item">
+                <label>电子邮箱</label>
+                <input type="email" name="email" placeholder="请填写常用电子邮箱（用于接收回执）">
+            </div>
+            <div class="form-item">
+                <label>部门/职务</label>
+                <input type="text" name="department" placeholder="如：采购部/经理、技术部/总监等">
+            </div>
+            <div class="form-item">
+                <label>推荐人姓名</label>
+                <input type="text" name="referrerName" placeholder="请填写推荐人真实姓名">
+            </div>
+            <div class="form-item">
+                <label>推荐人电话</label>
+                <input type="tel" name="referrerPhone" placeholder="请填写推荐人有效手机号码">
+            </div>
+            <div class="form-item">
+                <label>推荐人身份证号</label>
+                <input type="text" name="referrerIdCard" placeholder="请填写推荐人身份证号码">
+            </div>
+        </div>
+
+        <!-- 对接业务及需求 -->
+        <div class="form-section">
+            <div class="section-title">三、对接业务及需求</div>
+            <div class="form-item">
+                <label>对接业务类型 <span class="required">*</span></label>
+                <select name="businessType" required>
+                    <option value="">请选择对接业务类型</option>
+                    <option value="采购">采购/招标合作</option>
+                    <option value="技术">技术合作/开发</option>
+                    <option value="市场">市场推广/异业合作</option>
+                    <option value="政策">政策申报/资质办理</option>
+                    <option value="其他">其他业务</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label>需求描述 <span class="required">*</span></label>
+                <textarea name="demandDescription" placeholder="请详细描述对接需求、期望目标、时间节点、特殊要求等信息" required></textarea>
+            </div>
+            <div class="form-item">
+                <label>预算范围</label>
+                <select name="budgetRange">
+                    <option value="">请选择预算范围</option>
+                    <option value="面议">面议</option>
+                    <option value="1万内">1万元以内</option>
+                    <option value="1-5万">1-5万元</option>
+                    <option value="5-20万">5-20万元</option>
+                    <option value="20万以上">20万元以上</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 材料上传 -->
+        <div class="form-section">
+            <div class="section-title">四、所需材料上传</div>
+            <div class="form-item">
+                <label>企业营业执照（复印件/电子版） <span class="required">*</span></label>
+                <div class="upload-area">
+                    <input type="file" id="license" accept=".jpg,.png,.pdf" required>
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">点击上传营业执照</div>
+                    <div class="hint">支持jpg、png、pdf格式，单个文件不超过10MB</div>
+                </div>
+            </div>
+            <div class="form-item">
+                <label>法人身份证复印件（如需）</label>
+                <div class="upload-area">
+                    <input type="file" id="idcard" accept=".jpg,.png,.pdf">
+                    <div class="upload-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="upload-text">点击上传法人身份证复印件</div>
+                    <div class="hint">支持jpg、png、pdf格式，单个文件不超过10MB</div>
+                </div>
+            </div>
+            <div class="form-item">
+                <label>项目需求说明书/招标书（如有）</label>
+                <div class="upload-area">
+                    <input type="file" id="demand" accept=".doc,.docx,.pdf">
+                    <div class="upload-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="upload-text">点击上传需求说明书/招标书</div>
+                    <div class="hint">支持doc、docx、pdf格式，单个文件不超过20MB</div>
+                </div>
+            </div>
+            <div class="form-item">
+                <label>其他补充材料</label>
+                <div class="upload-area">
+                    <input type="file" id="other" multiple accept=".jpg,.png,.pdf,.doc,.docx">
+                    <div class="upload-icon">
+                        <i class="fas fa-files-alt"></i>
+                    </div>
+                    <div class="upload-text">点击上传其他补充材料（可多选）</div>
+                    <div class="hint">可上传多个文件，支持jpg、png、pdf、doc、docx格式</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <button type="submit" class="submit-btn">提交对接材料</button>
+        
+        <!-- 提交状态反馈 -->
+        <div id="submitStatus" class="form-item" style="display: none; margin-top: 20px;">
+            <div class="status-content" style="padding: 15px; border-radius: var(--radius-md); text-align: center;"></div>
+        </div>
+    </form>
+    </div>
+    
+    <script>
+        // 表单提交处理
+        const form = document.getElementById('enterpriseForm');
+        const submitStatus = document.getElementById('submitStatus');
+        const statusContent = submitStatus.querySelector('.status-content');
+        
+        // 表单提交事件
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // 显示提交中状态
+            submitStatus.style.display = 'block';
+            statusContent.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在提交表单...';
+            statusContent.style.background = 'rgba(37, 99, 235, 0.1)';
+            statusContent.style.color = 'var(--primary-color)';
+            
+            // 构建表单数据
+            const formData = new FormData(form);
+            
+            try {
+                // 提交表单到后端API
+                const response = await fetch('/api/form/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 提交成功
+                    statusContent.innerHTML = '<i class="fas fa-check-circle"></i> ' + result.message;
+                    statusContent.style.background = 'rgba(16, 185, 129, 0.1)';
+                    statusContent.style.color = 'var(--success-color)';
+                    // 重置表单
+                    form.reset();
+                } else {
+                    // 提交失败
+                    statusContent.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + result.message;
+                    statusContent.style.background = 'rgba(239, 68, 68, 0.1)';
+                    statusContent.style.color = 'var(--danger-color)';
+                }
+            } catch (error) {
+                // 网络错误
+                statusContent.innerHTML = '<i class="fas fa-exclamation-circle"></i> 网络错误，请稍后重试';
+                statusContent.style.background = 'rgba(239, 68, 68, 0.1)';
+                statusContent.style.color = 'var(--danger-color)';
+                console.error('Form submission error:', error);
+            }
+        });
+        
+        // 实时表单验证
+        form.addEventListener('input', (e) => {
+            const input = e.target;
+            if (input.required && !input.value.trim()) {
+                input.style.borderColor = 'var(--danger-color)';
+            } else {
+                input.style.borderColor = 'var(--gray-200)';
+            }
+        });
+        
+        // 文件上传预览
+        const fileInputs = form.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                const uploadArea = input.closest('.upload-area');
+                const uploadText = uploadArea.querySelector('.upload-text');
+                
+                if (input.files.length > 0) {
+                    if (input.multiple) {
+                        uploadText.textContent = `已选择 ${input.files.length} 个文件`;
+                    } else {
+                        uploadText.textContent = `已选择文件：${input.files[0].name}`;
+                    }
+                    uploadArea.style.borderColor = 'var(--success-color)';
+                } else {
+                    uploadText.textContent = input.id === 'license' ? '点击上传营业执照' : 
+                                            input.id === 'idcard' ? '点击上传法人身份证复印件' :
+                                            input.id === 'demand' ? '点击上传需求说明书/招标书' :
+                                            '点击上传其他补充材料（可多选）';
+                    uploadArea.style.borderColor = 'var(--gray-200)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
